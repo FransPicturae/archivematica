@@ -29,23 +29,19 @@ import os
 import re
 import sys
 import time
-from lxml import etree
 
-from django.db.models import Min, Q
-from main.models import File, Identifier, Transfer
-
-# archivematicaCommon
-from archivematicaFunctions import get_dashboard_uuid
 import namespaces as ns
 import version
 
-from externals import xmltodict
-
+# archivematicaCommon
+from archivematicaFunctions import get_dashboard_uuid
+from django.db.models import Min, Q
 from elasticsearch import Elasticsearch, ImproperlyConfigured
 from elasticsearch.helpers import bulk
-
+from externals import xmltodict
+from lxml import etree
+from main.models import File, Identifier, Transfer
 from six.moves import range
-
 
 logger = logging.getLogger("archivematica.common")
 
@@ -656,13 +652,15 @@ def index_transfer_and_files(client, uuid, path, printfn=print):
     # Default status of a transfer file document in the index.
     status = "backlog"
 
-    transfer_name, ingest_date = "", str(datetime.date.today())
+    transfer_name, accession_id, ingest_date = "", "", str(datetime.date.today())
     try:
         transfer = Transfer.objects.get(uuid=uuid)
     except Transfer.DoesNotExist:
         pass
     else:
         transfer_name = transfer.currentlocation.split("/")[-2]
+        if transfer.accessionid:
+            accession_id = transfer.accessionid
         # It doesn't seem that Archivematica records the ingestion date
         # associated with the Transfer but we can look at the earliest file
         # entry instead - as long as there is a match which may not always be
@@ -685,6 +683,7 @@ def index_transfer_and_files(client, uuid, path, printfn=print):
     transfer_data = {
         "name": transfer_name,
         "status": status,
+        "accessionid": accession_id,
         "ingest_date": ingest_date,
         "file_count": files_indexed,
         "uuid": uuid,
