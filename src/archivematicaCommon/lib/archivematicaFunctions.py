@@ -34,12 +34,11 @@ import pprint
 import re
 from uuid import uuid4
 
+import scandir
 import six
 from lxml import etree
-
 from main.models import DashboardSetting
 from namespaces import NSMAP
-
 
 REQUIRED_DIRECTORIES = (
     "logs",
@@ -284,6 +283,19 @@ def format_subdir_path(dir_path, path_prefix_to_repl):
     return os.path.join(dir_path, "").replace(
         path_prefix_to_repl, "%transferDirectory%", 1
     )
+
+
+def get_dir_size(dir_path):
+    """
+    Return size of directory, calculated by recursively walking files.
+    :param transfer_path: absolute path to directory
+    """
+    size = 0
+    for dirpath, _, filenames in scandir.walk(dir_path):
+        for filename in filenames:
+            file_path = os.path.join(dirpath, filename)
+            size += os.path.getsize(file_path)
+    return size
 
 
 def str2bool(val):

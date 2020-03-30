@@ -16,23 +16,19 @@ import shutil
 import uuid
 
 import django
-import scandir
-
-django.setup()
+import elasticSearchFunctions
+import metsrw
+import storageService as storage_service
+from archivematicaFunctions import get_dir_size, get_setting
+from bagit import make_bag
+from custom_handlers import get_script_logger
+from databaseFunctions import insertIntoEvents
 from django.conf import settings as mcpclient_settings
 from django.db import transaction
 from django.db.models import Q
-
-from archivematicaFunctions import get_setting
-from custom_handlers import get_script_logger
-from databaseFunctions import insertIntoEvents
-import elasticSearchFunctions
 from main.models import Agent, File, UnitVariable
-import storageService as storage_service
 
-from bagit import make_bag
-import metsrw
-
+django.setup()
 
 logger = get_script_logger("archivematica.mcp.client.move_to_backlog")
 
@@ -191,11 +187,7 @@ def main(job, transfer_id, transfer_path, created_at):
     _index_transfer(job, transfer_id, transfer_path)
 
     logger.info("Calculating size...")
-    size = 0
-    for dirpath, _, filenames in scandir.walk(transfer_path):
-        for filename in filenames:
-            file_path = os.path.join(dirpath, filename)
-            size += os.path.getsize(file_path)
+    size = get_dir_size(transfer_path)
 
     # Make Transfer path relative to Location
     shared_path = os.path.join(current_location["path"], "")
