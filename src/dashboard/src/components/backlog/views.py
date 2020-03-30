@@ -94,11 +94,19 @@ def get_es_property_from_column_index(index, file_mode):
         (
             "name.raw",
             "uuid",
+            "accessionid",
             "file_count",
+            "size",
             "ingest_date",
+            "pending_deletion",
             None,
         ),  # Transfers are being displayed
-        ("filename.raw", "sipuuid", None),  # Transfer files are being displayed
+        (
+            "filename.raw",
+            "sipuuid",
+            "accessionid",
+            None,
+        ),  # Transfer files are being displayed
     )
 
     if index < 0 or index >= len(table_columns[file_mode]):
