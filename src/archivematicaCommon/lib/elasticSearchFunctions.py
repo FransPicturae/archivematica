@@ -674,7 +674,14 @@ def index_transfer_and_files(client, uuid, path, printfn=print):
     printfn("Transfer UUID: " + uuid)
     printfn("Indexing Transfer files ...")
     files_indexed = _index_transfer_files(
-        client, uuid, path, ingest_date, status=status, printfn=printfn
+        client,
+        uuid,
+        path,
+        transfer_name,
+        accession_id,
+        ingest_date,
+        status=status,
+        printfn=printfn,
     )
 
     printfn("Files indexed: " + str(files_indexed))
@@ -697,13 +704,25 @@ def index_transfer_and_files(client, uuid, path, printfn=print):
     return 0
 
 
-def _index_transfer_files(client, uuid, path, ingest_date, status="", printfn=print):
+def _index_transfer_files(
+    client,
+    uuid,
+    path,
+    transfer_name,
+    accession_id,
+    ingest_date,
+    status="",
+    printfn=print,
+):
     """Indexes files in the Transfer with UUID `uuid` at path `path`.
 
     :param client: ElasticSearch client.
     :param uuid: UUID of the Transfer in the DB.
     :param path: path on disk, including the transfer directory and a
                  trailing / but not including objects/.
+    :param transfer_name: name of Transfer
+    :param accession_id: optional accession ID
+    :param ingest_date: date Transfer was indexed
     :param status: optional Transfer status.
     :param printfn: optional print funtion.
     :return: number of files indexed.
@@ -713,14 +732,6 @@ def _index_transfer_files(client, uuid, path, ingest_date, status="", printfn=pr
     # Some files should not be indexed.
     # This should match the basename of the file.
     ignore_files = ["processingMCP.xml"]
-
-    # Get accessionId and name from Transfers table using UUID
-    try:
-        transfer = Transfer.objects.get(uuid=uuid)
-        accession_id = transfer.accessionid
-        transfer_name = transfer.currentlocation.split("/")[-2]
-    except Transfer.DoesNotExist:
-        accession_id = transfer_name = ""
 
     # Get dashboard UUID
     dashboard_uuid = get_dashboard_uuid()
