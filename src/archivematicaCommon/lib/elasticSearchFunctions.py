@@ -34,7 +34,7 @@ import namespaces as ns
 import version
 
 # archivematicaCommon
-from archivematicaFunctions import get_dashboard_uuid
+from archivematicaFunctions import get_dashboard_uuid, get_dir_size
 from django.db.models import Min, Q
 from elasticsearch import Elasticsearch, ImproperlyConfigured
 from elasticsearch.helpers import bulk
@@ -671,6 +671,8 @@ def index_transfer_and_files(client, uuid, path, printfn=print):
         if dt:
             ingest_date = str(dt.date())
 
+    transfer_size = get_dir_size(path)
+
     printfn("Transfer UUID: " + uuid)
     printfn("Indexing Transfer files ...")
     files_indexed = _index_transfer_files(
@@ -693,6 +695,7 @@ def index_transfer_and_files(client, uuid, path, printfn=print):
         "accessionid": accession_id,
         "ingest_date": ingest_date,
         "file_count": files_indexed,
+        "size": int(transfer_size) / (1024 * 1024),
         "uuid": uuid,
         "pending_deletion": False,
     }
