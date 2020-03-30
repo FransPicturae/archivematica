@@ -18,22 +18,18 @@
 from __future__ import absolute_import
 
 import logging
-import requests
 
+import elasticSearchFunctions
+import requests
+import storageService as storage_service
+from components import advanced_search, decorators, helpers
 from django.conf import settings as django_settings
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, Http404
-from django.shortcuts import render, redirect
+from django.http import Http404, HttpResponse
+from django.shortcuts import redirect, render
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
-
-import elasticSearchFunctions
-import storageService as storage_service
-
-from components import advanced_search
-from components import decorators
-from components import helpers
 
 logger = logging.getLogger("archivematica.dashboard")
 
@@ -145,7 +141,7 @@ def search(request):
     try:
         if file_mode:
             index = "transferfiles"
-            source = "filename,sipuuid,relative_path"
+            source = "filename,sipuuid,relative_path,accessionid"
         else:
             # Transfer mode:
             # Query to transferfile, but only fetch & aggregrate transfer UUIDs.
@@ -166,7 +162,9 @@ def search(request):
             # Recreate query to search over transfers
             query = {"query": {"terms": {"uuid": uuids}}}
             index = "transfers"
-            source = "name,uuid,file_count,ingest_date"
+            source = (
+                "name,uuid,file_count,ingest_date,accessionid,size,pending_deletion"
+            )
 
         hits = es_client.search(
             index=index,
@@ -185,6 +183,19 @@ def search(request):
 
     results = [x["_source"] for x in hits["hits"]["hits"]]
 
+    def format_values(k, v):
+        """
+        Format search result values for display in Backlog tab.
+        """
+        if k == "size":
+            return "{0:.2f} MB".format(float(v))
+        return v
+
+    formatted_results = []
+    for result in results:
+        formatted_dict = {k: format_values(k, v) for k, v in result.items()}
+        formatted_results.append(formatted_dict)
+
     return helpers.json_response(
         {
             "iTotalRecords": hit_count,
@@ -192,7 +203,7 @@ def search(request):
             "sEcho": int(
                 request.GET.get("sEcho", 0)
             ),  # It was recommended we convert sEcho to int to prevent XSS
-            "aaData": results,
+            "aaData": formatted_results,
         }
     )
 

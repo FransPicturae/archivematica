@@ -18,6 +18,7 @@ $(document).ready(function()
         var cols = [
           {sTitle: gettext('Filename'), mData: 'filename'},
           {sTitle: gettext('Transfer UUID'), mData: 'sipuuid'},
+          {sTitle: gettext('Accession no.'), mData: 'accessionid'},
           {sTitle: gettext('Actions'), mData: 'relative_path', mRender: render_file_actions_col}
         ];
       }
@@ -25,8 +26,11 @@ $(document).ready(function()
         var cols = [
           {sTitle: gettext('Name'), mData: 'name'},
           {sTitle: gettext('Transfer UUID'), mData: 'uuid'},
+          {sTitle: gettext('Accession no.'), mData: 'accessionid'},
           {sTitle: gettext('File count'), mData: 'file_count'},
+          {sTitle: gettext('Size'), mData: 'size'},
           {sTitle: gettext('Ingest date'), mData: 'ingest_date'},
+          {sTitle: gettext('Pending deletion?'), mData: 'pending_deletion'},
           {sTitle: gettext('Actions'), mData: 'uuid', mRender: render_transfer_actions_col}
         ];
       }
