@@ -11,6 +11,11 @@
   margin-top: 2px;
 }
 
+.dt-buttons {
+  margin-left: 10px;
+  margin-top: 2px;
+}
+
 #backlog-entries .btn {
   padding: 2px;
 }

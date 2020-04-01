@@ -26,16 +26,23 @@ $(document).ready(function()
         var cols = [
           {sTitle: gettext('Name'), mData: 'name'},
           {sTitle: gettext('Transfer UUID'), mData: 'uuid'},
-          {sTitle: gettext('Accession no.'), mData: 'accessionid'},
+          {sTitle: gettext('Accession number'), mData: 'accessionid'},
           {sTitle: gettext('File count'), mData: 'file_count'},
           {sTitle: gettext('Size'), mData: 'size'},
           {sTitle: gettext('Ingest date'), mData: 'ingest_date'},
-          {sTitle: gettext('Pending deletion?'), mData: 'pending_deletion'},
+          {sTitle: gettext('Pending deletion'), mData: 'pending_deletion'},
           {sTitle: gettext('Actions'), mData: 'uuid', mRender: render_transfer_actions_col}
         ];
       }
 
       return $('#backlog-entries').dataTable({
+        'dom': 'rtiBp',
+        'buttons': [
+          {
+              'extend': 'colvis',
+              'text': 'Select columns'
+          }
+        ],
         'language': {
           'sEmptyTable':            pgettext('DataTable - sEmptyTable',         'No data available in table'),
           'sInfo':                  pgettext('DataTable - sInfo',               'Showing _START_ to _END_ of _TOTAL_ entries'),
