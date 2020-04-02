@@ -18,7 +18,7 @@ $(document).ready(function()
         var cols = [
           {sTitle: gettext('Filename'), mData: 'filename'},
           {sTitle: gettext('Transfer UUID'), mData: 'sipuuid'},
-          {sTitle: gettext('Accession no.'), mData: 'accessionid'},
+          {sTitle: gettext('Accession number'), mData: 'accessionid'},
           {sTitle: gettext('Actions'), mData: 'relative_path', mRender: render_file_actions_col}
         ];
       }
