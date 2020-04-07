@@ -13,6 +13,17 @@ $(document).ready(function()
              class="delete-icon" src="/media/images/delete.png"></a>';
     }
 
+    function get_visible_columns() {
+      if ($('#id_show_files').prop('checked')) {
+        // TODO: Fetch info from db
+        return [];
+      }
+      else {
+        // TODO: Fetch info from db
+        return [];
+      }
+    }
+
     function get_datatable() {
       if ($('#id_show_files').prop('checked')) {
         var cols = [
@@ -37,6 +48,12 @@ $(document).ready(function()
 
       return $('#backlog-entries').dataTable({
         'dom': 'rtiBp',
+        'columnDefs': [
+          {
+            'targets': get_visible_columns(),
+            'visible': false 
+          }
+        ],
         'buttons': [
           {
               'extend': 'colvis',
