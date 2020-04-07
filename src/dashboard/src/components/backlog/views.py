@@ -94,9 +94,9 @@ def get_es_property_from_column_index(index, file_mode):
         (
             "name.raw",
             "uuid",
-            "accessionid",
-            "file_count",
             "size",
+            "file_count",
+            "accessionid",
             "ingest_date",
             "pending_deletion",
             None,
