@@ -37,9 +37,9 @@ $(document).ready(function()
         var cols = [
           {sTitle: gettext('Name'), mData: 'name'},
           {sTitle: gettext('Transfer UUID'), mData: 'uuid'},
-          {sTitle: gettext('Accession number'), mData: 'accessionid'},
-          {sTitle: gettext('File count'), mData: 'file_count'},
           {sTitle: gettext('Size'), mData: 'size'},
+          {sTitle: gettext('File count'), mData: 'file_count'},
+          {sTitle: gettext('Accession number'), mData: 'accessionid'},
           {sTitle: gettext('Ingest date'), mData: 'ingest_date'},
           {sTitle: gettext('Pending deletion'), mData: 'pending_deletion'},
           {sTitle: gettext('Actions'), mData: 'uuid', mRender: render_transfer_actions_col}
