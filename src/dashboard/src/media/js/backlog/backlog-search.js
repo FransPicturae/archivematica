@@ -16,11 +16,11 @@ $(document).ready(function()
     function get_visible_columns() {
       if ($('#id_show_files').prop('checked')) {
         // TODO: Fetch info from db
-        return [];
+        return [ 2 ];
       }
       else {
         // TODO: Fetch info from db
-        return [];
+        return [ 3, 4, 6 ];
       }
     }
 
