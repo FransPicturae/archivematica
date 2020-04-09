@@ -46,7 +46,7 @@ $(document).ready(function()
       return $('#backlog-entries').dataTable({
         'dom': 'rtiBp',
         'stateSave': true,
-        "stateDuration": 60 * 60 * 24 * 365 * 10, // set state duration to 10 years
+        'stateDuration': 60 * 60 * 24 * 365 * 10, // set state duration to 10 years
         'stateSaveParams': function(settings, data) {
             delete data.search;
             delete data.start;
