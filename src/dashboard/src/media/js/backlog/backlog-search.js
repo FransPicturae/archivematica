@@ -18,7 +18,7 @@ $(document).ready(function()
     }
 
     function get_default_hidden_columns() {
-      return $('#id_show_files').prop('checked') ? [2] : [3, 4, 6];
+      return $('#id_show_files').prop('checked') ? [2, 3] : [3, 4, 6];
     }
  
     function get_datatable() {
@@ -27,6 +27,7 @@ $(document).ready(function()
           {sTitle: gettext('Filename'), mData: 'filename'},
           {sTitle: gettext('Transfer UUID'), mData: 'sipuuid'},
           {sTitle: gettext('Accession number'), mData: 'accessionid'},
+          {sTitle: gettext('Pending deletion'), mData: 'pending_deletion'},
           {sTitle: gettext('Actions'), mData: 'relative_path', mRender: render_file_actions_col}
         ];
       }
