@@ -106,6 +106,7 @@ def get_es_property_from_column_index(index, file_mode):
             "filename.raw",
             "sipuuid",
             "accessionid",
+            "pending_deletion",
             None,
         ),  # Transfer files are being displayed
     )
@@ -150,7 +151,7 @@ def search(request):
     try:
         if file_mode:
             index = "transferfiles"
-            source = "filename,sipuuid,relative_path,accessionid"
+            source = "filename,sipuuid,relative_path,accessionid,pending_deletion"
         else:
             # Transfer mode:
             # Query to transferfile, but only fetch & aggregrate transfer UUIDs.
