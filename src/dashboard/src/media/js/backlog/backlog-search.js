@@ -57,9 +57,7 @@ $(document).ready(function()
                 data: JSON.stringify(data),
                 dataType: "json",
                 type: "POST",
-                success: function() {
-                  console.log("State saved to DashboardSettings:", JSON.stringify(data));
-                }
+                success: function() {}
             });
         },
         // loading is done syncronously - supported in datatables < 1.10.13
