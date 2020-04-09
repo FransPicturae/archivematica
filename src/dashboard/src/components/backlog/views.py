@@ -300,7 +300,9 @@ def load_state(request, table):
     setting_name = "{}_datatable_state".format(table)
     state = helpers.get_setting(setting_name)
     if state:
-        return helpers.json_response(json.loads(state))
+        return HttpResponse(
+            json.loads(state), content_type="application/json", status=200
+        )
     return helpers.json_response(
         {"error": True, "message": "Setting not found"}, status_code=500
     )
