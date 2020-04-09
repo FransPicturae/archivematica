@@ -91,7 +91,7 @@ $(document).ready(function()
         'buttons': [
           {
               'extend': 'colvis',
-              'text': '<img src="/media/images/cog.png"> Select columns'
+              'text': '<img src="/media/images/cog.png"> ' + gettext('Select columns')
           }
         ],
         'language': {
