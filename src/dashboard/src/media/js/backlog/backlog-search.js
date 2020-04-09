@@ -66,6 +66,10 @@ $(document).ready(function()
                 dataType: 'json',
                 success: function (json) {
                   callback(json);
+                },
+                // Handle case where there is no saved state
+                error: function () {
+                  callback(null);
                 }
             });
         },
