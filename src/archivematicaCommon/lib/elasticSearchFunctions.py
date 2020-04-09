@@ -273,8 +273,10 @@ def _get_transfers_index_body():
                     },
                     "status": {"type": "text"},
                     "ingest_date": {"type": "date", "format": "dateOptionalTime"},
+                    "size": {"type": "double"},
                     "file_count": {"type": "integer"},
                     "uuid": {"type": "keyword"},
+                    "accessionid": {"type": "keyword"},
                     "pending_deletion": {"type": "boolean"},
                 }
             }
@@ -324,6 +326,7 @@ def _get_transferfiles_index_body():
                             "group": {"type": "text"},
                         },
                     },
+                    "pending_deletion": {"type": "boolean"},
                 }
             }
         },
