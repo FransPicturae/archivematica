@@ -12,6 +12,10 @@ $(document).ready(function()
              '<a href="/backlog/delete/' + uuid + '"><img title="' + gettext('Request deletion') + '" \
              class="delete-icon" src="/media/images/delete.png"></a>';
     }
+
+    function render_status(row_data) {
+      return row_data == true ? 'Delete requested' : 'Stored';
+    }
  
     function get_state_url_params() {
       return $('#id_show_files').prop('checked') ? 'transferfiles/' : 'transfers/';
@@ -27,7 +31,7 @@ $(document).ready(function()
           {sTitle: gettext('Filename'), mData: 'filename'},
           {sTitle: gettext('Transfer UUID'), mData: 'sipuuid'},
           {sTitle: gettext('Accession number'), mData: 'accessionid'},
-          {sTitle: gettext('Pending deletion'), mData: 'pending_deletion'},
+          {sTitle: gettext('Status'), mData: 'pending_deletion', mRender: render_status},
           {sTitle: gettext('Actions'), mData: 'relative_path', mRender: render_file_actions_col}
         ];
       }
@@ -39,7 +43,7 @@ $(document).ready(function()
           {sTitle: gettext('File count'), mData: 'file_count'},
           {sTitle: gettext('Accession number'), mData: 'accessionid'},
           {sTitle: gettext('Ingest date'), mData: 'ingest_date'},
-          {sTitle: gettext('Pending deletion'), mData: 'pending_deletion'},
+          {sTitle: gettext('Status'), mData: 'pending_deletion', mRender: render_status},
           {sTitle: gettext('Actions'), mData: 'uuid', mRender: render_transfer_actions_col}
         ];
       }
