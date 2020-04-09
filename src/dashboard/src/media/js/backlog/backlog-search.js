@@ -56,24 +56,18 @@ $(document).ready(function()
                 url: '/backlog/save_state/' + get_state_url_params(),
                 data: JSON.stringify(data),
                 dataType: "json",
-                type: "POST",
+                type: 'POST',
                 success: function() {}
             });
         },
-        // loading is done syncronously - supported in datatables < 1.10.13
-        // see: https://datatables.net/reference/option/stateLoadCallback
-        'stateLoadCallback': function(settings, callback) {
-            var o;
-
+        'stateLoadCallback': function (settings, callback) {
             $.ajax({
                 url: '/backlog/load_state/' + get_state_url_params(),
-                async: false,
                 dataType: 'json',
-                success: function(json) {
-                  o = JSON.parse(json);
+                success: function (json) {
+                  callback(json);
                 }
             });
-            return o;
         },
         'columnDefs': [
           {
