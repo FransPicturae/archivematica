@@ -632,7 +632,7 @@ def _index_aip_files(client, uuid, mets, name, identifiers=None, aip_metadata=No
     bulk(client, _generator(), chunk_size=50)
 
 
-def index_transfer_and_files(client, uuid, path, printfn=print):
+def index_transfer_and_files(client, uuid, path, pending_deletion=False, printfn=print):
     """Indexes Transfer and Transfer files with UUID `uuid` at path `path`.
 
     :param client: The ElasticSearch client.
@@ -682,6 +682,7 @@ def index_transfer_and_files(client, uuid, path, printfn=print):
         transfer_name,
         accession_id,
         ingest_date,
+        pending_deletion=pending_deletion,
         status=status,
         printfn=printfn,
     )
@@ -697,7 +698,7 @@ def index_transfer_and_files(client, uuid, path, printfn=print):
         "file_count": files_indexed,
         "size": int(transfer_size) / (1024 * 1024),
         "uuid": uuid,
-        "pending_deletion": False,
+        "pending_deletion": pending_deletion,
     }
 
     _wait_for_cluster_yellow_status(client)
@@ -715,6 +716,7 @@ def _index_transfer_files(
     accession_id,
     ingest_date,
     status="",
+    pending_deletion=False,
     printfn=print,
 ):
     """Indexes files in the Transfer with UUID `uuid` at path `path`.
@@ -789,6 +791,7 @@ def _index_transfer_files(
                     "file_extension": file_extension,
                     "bulk_extractor_reports": bulk_extractor_reports,
                     "format": formats,
+                    "pending_deletion": pending_deletion,
                 }
 
                 _wait_for_cluster_yellow_status(client)
@@ -1353,6 +1356,16 @@ def mark_aip_stored(client, uuid):
 
 def mark_backlog_deletion_requested(client, uuid):
     _update_field(client, "transfers", uuid, "pending_deletion", True)
+
+    files = _document_ids_from_field_query(client, "transferfiles", "sipuuid", uuid)
+    if len(files) > 0:
+        for file_id in files:
+            client.update(
+                body={"doc": {"pending_deletion": True}},
+                index="transferfiles",
+                doc_type=DOC_TYPE,
+                id=file_id,
+            )
 
 
 # ---------------
