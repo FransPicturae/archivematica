@@ -17,6 +17,7 @@
 # along with Archivematica.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import absolute_import
 
+import json
 import logging
 
 import elasticSearchFunctions
@@ -273,4 +274,33 @@ def download(request, uuid):
     """
     return helpers.stream_file_from_storage_service(
         storage_service.download_file_url(uuid)
+    )
+
+
+def save_state(request, table):
+    """
+    Save DataTable state JSON object as string in DashboardSettings.
+
+    :param table: Name of table to store state for.
+    :return: JSON success confirmation
+    """
+    setting_name = "{}_datatable_state".format(table)
+    state = json.dumps(request.body)
+    helpers.set_setting(setting_name, state)
+    return helpers.json_response({"success": True})
+
+
+def load_state(request, table):
+    """
+    Retrieve DataTable state JSON object stored in DashboardSettings.
+
+    :param table: Name of table to store state for.
+    :return: JSON state
+    """
+    setting_name = "{}_datatable_state".format(table)
+    state = helpers.get_setting(setting_name)
+    if state:
+        return helpers.json_response(json.loads(state))
+    return helpers.json_response(
+        {"error": True, "message": "Setting not found"}, status_code=500
     )
