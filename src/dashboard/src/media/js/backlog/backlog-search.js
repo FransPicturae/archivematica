@@ -12,18 +12,15 @@ $(document).ready(function()
              '<a href="/backlog/delete/' + uuid + '"><img title="' + gettext('Request deletion') + '" \
              class="delete-icon" src="/media/images/delete.png"></a>';
     }
-
-    function get_visible_columns() {
-      if ($('#id_show_files').prop('checked')) {
-        // TODO: Fetch info from db
-        return [ 2 ];
-      }
-      else {
-        // TODO: Fetch info from db
-        return [ 3, 4, 6 ];
-      }
+ 
+    function get_state_url_params() {
+      return $('#id_show_files').prop('checked') ? 'transferfiles/' : 'transfers/';
     }
 
+    function get_default_hidden_columns() {
+      return $('#id_show_files').prop('checked') ? [2] : [3, 4, 6];
+    }
+ 
     function get_datatable() {
       if ($('#id_show_files').prop('checked')) {
         var cols = [
@@ -48,10 +45,42 @@ $(document).ready(function()
 
       return $('#backlog-entries').dataTable({
         'dom': 'rtiBp',
+        'stateSave': true,
+        "stateDuration": 60 * 60 * 24 * 365 * 10, // set state duration to 10 years
+        'stateSaveParams': function(settings, data) {
+            delete data.search;
+            delete data.start;
+        },
+        'stateSaveCallback': function(settings, data) {
+            $.ajax({
+                url: '/backlog/save_state/' + get_state_url_params(),
+                data: JSON.stringify(data),
+                dataType: "json",
+                type: "POST",
+                success: function() {
+                  console.log("State saved to DashboardSettings:", JSON.stringify(data));
+                }
+            });
+        },
+        // loading is done syncronously - supported in datatables < 1.10.13
+        // see: https://datatables.net/reference/option/stateLoadCallback
+        'stateLoadCallback': function(settings, callback) {
+            var o;
+
+            $.ajax({
+                url: '/backlog/load_state/' + get_state_url_params(),
+                async: false,
+                dataType: 'json',
+                success: function(json) {
+                  o = JSON.parse(json);
+                }
+            });
+            return o;
+        },
         'columnDefs': [
           {
-            'targets': get_visible_columns(),
-            'visible': false 
+            'targets': get_default_hidden_columns(),
+            'visible': false
           }
         ],
         'buttons': [
