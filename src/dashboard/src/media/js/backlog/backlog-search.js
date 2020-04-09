@@ -51,6 +51,10 @@ $(document).ready(function()
         'stateSaveParams': function(settings, data) {
             delete data.search;
             delete data.start;
+            delete data.order;
+            for ( var i=0 ; i< data.columns.length ; i++ ) {
+              delete data.columns[i].search;
+            }
         },
         'stateSaveCallback': function(settings, data) {
             $.ajax({
