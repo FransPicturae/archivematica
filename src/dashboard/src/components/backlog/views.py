@@ -20,10 +20,6 @@ from __future__ import absolute_import
 import json
 import logging
 
-import elasticSearchFunctions
-import requests
-import storageService as storage_service
-from components import advanced_search, decorators, helpers
 from django.conf import settings as django_settings
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -31,6 +27,12 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, render
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
+import requests
+
+import elasticSearchFunctions
+import storageService as storage_service
+
+from components import advanced_search, decorators, helpers
 
 logger = logging.getLogger("archivematica.dashboard")
 
