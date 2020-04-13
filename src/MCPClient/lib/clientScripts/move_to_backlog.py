@@ -21,16 +21,16 @@ django.setup()
 from django.conf import settings as mcpclient_settings
 from django.db import transaction
 from django.db.models import Q
+from bagit import make_bag
+import metsrw
 
 from archivematicaFunctions import get_dir_size, get_setting
 from custom_handlers import get_script_logger
 from databaseFunctions import insertIntoEvents
 import elasticSearchFunctions
-from main.models import Agent, File, UnitVariable
 import storageService as storage_service
 
-from bagit import make_bag
-import metsrw
+from main.models import Agent, File, UnitVariable
 
 
 logger = get_script_logger("archivematica.mcp.client.move_to_backlog")
