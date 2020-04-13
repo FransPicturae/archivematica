@@ -307,5 +307,5 @@ def load_state(request, table):
             json.loads(state), content_type="application/json", status=200
         )
     return helpers.json_response(
-        {"error": True, "message": "Setting not found"}, status_code=500
+        {"error": True, "message": "Setting not found"}, status_code=404
     )
