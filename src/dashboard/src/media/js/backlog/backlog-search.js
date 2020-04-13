@@ -64,7 +64,7 @@ $(document).ready(function()
             $.ajax({
                 url: '/backlog/save_state/' + get_state_url_params(),
                 data: JSON.stringify(data),
-                dataType: "json",
+                dataType: 'json',
                 type: 'POST',
                 success: function() {}
             });
