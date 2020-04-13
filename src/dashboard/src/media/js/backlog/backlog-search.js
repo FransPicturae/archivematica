@@ -52,10 +52,12 @@ $(document).ready(function()
         'dom': 'rtiBp',
         'stateSave': true,
         'stateDuration': 60 * 60 * 24 * 365 * 10, // set state duration to 10 years
+        // Only save column visibility
         'stateSaveParams': function(settings, data) {
             delete data.search;
             delete data.start;
             delete data.order;
+            delete data.length;
             for ( var i=0 ; i< data.columns.length ; i++ ) {
               delete data.columns[i].search;
             }
