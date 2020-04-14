@@ -31,7 +31,7 @@ $(document).ready(function()
           {sTitle: gettext('Filename'), mData: 'filename'},
           {sTitle: gettext('Transfer UUID'), mData: 'sipuuid'},
           {sTitle: gettext('Accession number'), mData: 'accessionid'},
-          {sTitle: gettext('Status'), mData: 'pending_deletion', mRender: render_status},
+          {sTitle: gettext('Status'), mData: 'pending_deletion', mRender: render_status, defaultContent: 'Stored'},
           {sTitle: gettext('Actions'), mData: 'relative_path', mRender: render_file_actions_col}
         ];
       }
@@ -39,9 +39,9 @@ $(document).ready(function()
         var cols = [
           {sTitle: gettext('Name'), mData: 'name'},
           {sTitle: gettext('Transfer UUID'), mData: 'uuid'},
-          {sTitle: gettext('Size'), mData: 'size'},
+          {sTitle: gettext('Size'), mData: 'size', defaultContent: ''},
           {sTitle: gettext('File count'), mData: 'file_count'},
-          {sTitle: gettext('Accession number'), mData: 'accessionid'},
+          {sTitle: gettext('Accession number'), mData: 'accessionid', defaultContent: ''},
           {sTitle: gettext('Ingest date'), mData: 'ingest_date'},
           {sTitle: gettext('Status'), mData: 'pending_deletion', mRender: render_status},
           {sTitle: gettext('Actions'), mData: 'uuid', mRender: render_transfer_actions_col}
