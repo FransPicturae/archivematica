@@ -24,6 +24,10 @@ $(document).ready(function()
     function get_default_hidden_columns() {
       return $('#id_show_files').prop('checked') ? [2, 3] : [3, 4, 6];
     }
+
+    function get_action_column_index() {
+      return $('#id_show_files').prop('checked') ? [4] : [7];
+    }
  
     function get_datatable() {
       if ($('#id_show_files').prop('checked')) {
@@ -88,6 +92,10 @@ $(document).ready(function()
           {
             'targets': get_default_hidden_columns(),
             'visible': false
+          },
+          {
+            'targets': get_action_column_index(),
+            'orderable': false
           }
         ],
         'buttons': [
