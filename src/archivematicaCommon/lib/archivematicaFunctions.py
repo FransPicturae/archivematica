@@ -308,9 +308,10 @@ def get_dir_size(dir_path):
     try:
         bag = bagit.Bag(dir_path)
         oxum = bag.info.get("Payload-Oxum")
-        oxum_byte_count = int(oxum.split(".")[0])
-        return oxum_byte_count
-    except (bagit.BagError, AttributeError):
+        if oxum is not None:
+            return int(oxum.split(".")[0])
+        return walk_dir(dir_path)
+    except bagit.BagError:
         return walk_dir(dir_path)
 
 
