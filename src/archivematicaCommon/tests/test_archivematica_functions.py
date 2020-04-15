@@ -33,7 +33,7 @@ def test_get_dir_size_bag_missing_oxum(tmpdir):
     data_file = bag_dir.join("file.txt")
     data_file.write("Lorem ipsum")
     bagit.make_bag(bag_dir.strpath)
-    # Overrite bag-info.txt without Payload-Oxum
+    # Overwrite bag-info.txt without Payload-Oxum
     bag_info = bag_dir.join("bag-info.txt")
     bag_info.write("Bagging-Date: 2020-04-15")
     # Test returned value against expected
