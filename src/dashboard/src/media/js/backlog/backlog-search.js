@@ -13,8 +13,8 @@ $(document).ready(function()
              class="delete-icon" src="/media/images/delete.png"></a>';
     }
 
-    function render_status(row_data) {
-      return row_data == true ? 'Delete requested' : 'Stored';
+    function render_status(pending_deletion, type, row_data) {
+      return pending_deletion == true ? 'Delete requested' : 'Stored';
     }
  
     function get_state_url_params() {
@@ -35,7 +35,7 @@ $(document).ready(function()
           {sTitle: gettext('Filename'), mData: 'filename'},
           {sTitle: gettext('Transfer UUID'), mData: 'sipuuid'},
           {sTitle: gettext('Accession number'), mData: 'accessionid'},
-          {sTitle: gettext('Status'), mData: 'pending_deletion', mRender: render_status, defaultContent: 'Stored'},
+          {sTitle: gettext('Status'), mData: 'pending_deletion', mRender: render_status},
           {sTitle: gettext('Actions'), mData: 'relative_path', mRender: render_file_actions_col}
         ];
       }
