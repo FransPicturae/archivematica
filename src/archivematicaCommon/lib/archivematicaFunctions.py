@@ -25,7 +25,6 @@ different Archivematica modules.
 """
 from __future__ import absolute_import, print_function
 
-import bagit
 import base64
 import collections
 import hashlib
@@ -299,20 +298,18 @@ def walk_dir(dir_path):
     return size
 
 
-def get_dir_size(dir_path):
-    """Return size of directory. If directory is a Bag, use payload-oxum.
+def get_bag_size(bag, path):
+    """Return size of BagIt Bag, using Payload-Oxum if present.
     Otherwise, calculate size by recursively walking files.
-    :param transfer_path: absolute path to directory
+    :param transfer_path: Bag object
+    :param path: path to Bag directory
     :return: size in bytes (int)
     """
-    try:
-        bag = bagit.Bag(dir_path)
-        oxum = bag.info.get("Payload-Oxum")
-        if oxum is not None:
-            return int(oxum.split(".")[0])
-        return walk_dir(dir_path)
-    except bagit.BagError:
-        return walk_dir(dir_path)
+    oxum = bag.info.get("Payload-Oxum")
+    if oxum is not None:
+        return int(oxum.split(".")[0])
+    else:
+        return walk_dir(path)
 
 
 def str2bool(val):

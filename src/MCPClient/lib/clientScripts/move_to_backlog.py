@@ -24,7 +24,7 @@ from django.db.models import Q
 from bagit import make_bag
 import metsrw
 
-from archivematicaFunctions import get_dir_size, get_setting
+from archivematicaFunctions import get_bag_size, get_setting
 from custom_handlers import get_script_logger
 from databaseFunctions import insertIntoEvents
 import elasticSearchFunctions
@@ -70,7 +70,7 @@ def _create_file(
     return new_file
 
 
-def _index_transfer(job, transfer_id, transfer_path):
+def _index_transfer(job, transfer_id, transfer_path, size):
     """Index the transfer and its files in Elasticsearch."""
     if "transfers" not in mcpclient_settings.SEARCH_ENABLED:
         logger.info("Skipping indexing:" " Transfers indexing is currently disabled.")
@@ -78,7 +78,7 @@ def _index_transfer(job, transfer_id, transfer_path):
     elasticSearchFunctions.setup_reading_from_conf(mcpclient_settings)
     client = elasticSearchFunctions.get_client()
     elasticSearchFunctions.index_transfer_and_files(
-        client, transfer_id, transfer_path, printfn=job.pyprint
+        client, transfer_id, transfer_path, size, printfn=job.pyprint
     )
 
 
@@ -184,13 +184,12 @@ def main(job, transfer_id, transfer_path, created_at):
     _record_backlog_event(transfer_id, transfer_path, created_at)
 
     logger.info("Creating bag...")
-    _create_bag(transfer_id, transfer_path)
+    bag = _create_bag(transfer_id, transfer_path)
+
+    size = get_bag_size(bag, transfer_path)
 
     logger.info("Indexing the transfer...")
-    _index_transfer(job, transfer_id, transfer_path)
-
-    logger.info("Calculating size...")
-    size = get_dir_size(transfer_path)
+    _index_transfer(job, transfer_id, transfer_path, size)
 
     # Make Transfer path relative to Location
     shared_path = os.path.join(current_location["path"], "")

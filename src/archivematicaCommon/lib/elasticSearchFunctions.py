@@ -37,7 +37,7 @@ from lxml import etree
 from six.moves import range
 
 # archivematicaCommon
-from archivematicaFunctions import get_dashboard_uuid, get_dir_size
+from archivematicaFunctions import get_dashboard_uuid
 from externals import xmltodict
 import namespaces as ns
 import version
@@ -637,13 +637,16 @@ def _index_aip_files(client, uuid, mets, name, identifiers=None, aip_metadata=No
     bulk(client, _generator(), chunk_size=50)
 
 
-def index_transfer_and_files(client, uuid, path, pending_deletion=False, printfn=print):
+def index_transfer_and_files(
+    client, uuid, path, size, pending_deletion=False, printfn=print
+):
     """Indexes Transfer and Transfer files with UUID `uuid` at path `path`.
 
     :param client: The ElasticSearch client.
     :param uuid: The UUID of the transfer we're indexing.
     :param path: path on disk, including the transfer directory and a
                  trailing / but not including objects/.
+    :param path: size of transfer in bytes.
     :param printfn: optional print funtion.
     :return: 0 is succeded, 1 otherwise.
     """
@@ -676,8 +679,6 @@ def index_transfer_and_files(client, uuid, path, pending_deletion=False, printfn
         if dt:
             ingest_date = str(dt.date())
 
-    transfer_size = get_dir_size(path)
-
     printfn("Transfer UUID: " + uuid)
     printfn("Indexing Transfer files ...")
     files_indexed = _index_transfer_files(
@@ -701,7 +702,7 @@ def index_transfer_and_files(client, uuid, path, pending_deletion=False, printfn
         "accessionid": accession_id,
         "ingest_date": ingest_date,
         "file_count": files_indexed,
-        "size": int(transfer_size) / (1024 * 1024),
+        "size": int(size) / (1024 * 1024),
         "uuid": uuid,
         "pending_deletion": pending_deletion,
     }
