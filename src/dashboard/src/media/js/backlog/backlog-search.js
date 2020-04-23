@@ -21,10 +21,13 @@ $(document).ready(function()
       return $('#id_show_files').prop('checked') ? 'transferfiles/' : 'transfers/';
     }
 
+    // Return array consisting of column indices for columns that should be hidden
+    // by default if there is no saved table state in DashboardSettings
     function get_default_hidden_columns() {
       return $('#id_show_files').prop('checked') ? [2, 3] : [3, 4, 6];
     }
 
+    // Return array consisting of column index for "Actions" column
     function get_action_column_index() {
       return $('#id_show_files').prop('checked') ? [4] : [7];
     }
