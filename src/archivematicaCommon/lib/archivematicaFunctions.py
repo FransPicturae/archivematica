@@ -300,7 +300,14 @@ def walk_dir(dir_path):
 
 def get_bag_size(bag, path):
     """Return size of BagIt Bag, using Payload-Oxum if present.
-    Otherwise, calculate size by recursively walking files.
+
+    Payload-Oxum, like other Bag Metadata elements, is optional
+    per the BagIt specification:
+    https://tools.ietf.org/html/rfc8493#section-2.2.2
+
+    If the Bag does not have a Payload-Oxum, calculate size by
+    recursively walking files.
+
     :param transfer_path: Bag object
     :param path: path to Bag directory
     :return: size in bytes (int)
