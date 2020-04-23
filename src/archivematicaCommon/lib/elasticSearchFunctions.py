@@ -647,7 +647,7 @@ def index_transfer_and_files(
     :param uuid: The UUID of the transfer we're indexing.
     :param path: path on disk, including the transfer directory and a
                  trailing / but not including objects/.
-    :param path: size of transfer in bytes.
+    :param size: size of transfer in bytes.
     :param printfn: optional print funtion.
     :return: 0 is succeded, 1 otherwise.
     """
