@@ -2,18 +2,18 @@ $(document).ready(function()
   {
     var search = renderBacklogSearchForm(null, null, null);
 
-    function render_file_actions_col(relative_path, type, row_data) {
+    function render_file_actions_col(relative_path) {
       return '<a class="btn btn-default fa-download fa" target="_blank" href="' + '/filesystem/download_ss/?filepath=' +
               Base64.encode('/originals/' + relative_path) + '"> ' + gettext('Download') + '</a>';
     }
 
-    function render_transfer_actions_col(uuid, type, row_data) {
+    function render_transfer_actions_col(uuid) {
       return '<a class="btn btn-default fa-download fa" href="/backlog/download/' + uuid + '"> ' + gettext('Download') + '</a>' +
              '<a href="/backlog/delete/' + uuid + '"><img title="' + gettext('Request deletion') + '" \
              class="delete-icon" src="/media/images/delete.png"></a>';
     }
 
-    function render_status(pending_deletion, type, row_data) {
+    function render_status(pending_deletion) {
       return pending_deletion == true ? 'Delete requested' : 'Stored';
     }
  
