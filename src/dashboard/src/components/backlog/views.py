@@ -195,18 +195,11 @@ def search(request):
 
     results = [x["_source"] for x in hits["hits"]["hits"]]
 
-    def format_values(k, v):
-        """
-        Format search result values for display in Backlog tab.
-        """
-        if k == "size":
-            return "{0:.2f} MB".format(float(v))
-        return v
-
-    formatted_results = []
     for result in results:
-        formatted_dict = {k: format_values(k, v) for k, v in result.items()}
-        formatted_results.append(formatted_dict)
+        size = result.get("size")
+        if size is not None:
+            # Strip decimals beyond the second place
+            result["size"] = "{0:.2f} MB".format(float(size))
 
     return helpers.json_response(
         {
@@ -215,7 +208,7 @@ def search(request):
             "sEcho": int(
                 request.GET.get("sEcho", 0)
             ),  # It was recommended we convert sEcho to int to prevent XSS
-            "aaData": formatted_results,
+            "aaData": results,
         }
     )
 
